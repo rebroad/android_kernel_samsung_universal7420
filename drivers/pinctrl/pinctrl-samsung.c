@@ -1057,6 +1057,7 @@ static int samsung_pinctrl_create_function(struct device *dev,
 	for (i = 0; i < npins; ++i) {
 		const char *gname;
 		char *gname_copy;
+		size_t gname_len;
 
 		ret = of_property_read_string_index(func_np, "samsung,pins",
 							i, &gname);
@@ -1067,10 +1068,11 @@ static int samsung_pinctrl_create_function(struct device *dev,
 			return ret;
 		}
 
-		gname_copy = devm_kzalloc(dev, strlen(gname) + 1, GFP_KERNEL);
+		gname_len = strlen(gname) + 1;
+		gname_copy = devm_kzalloc(dev, gname_len, GFP_KERNEL);
 		if (!gname_copy)
 			return -ENOMEM;
-		strlcpy(gname_copy, gname, strlen(gname) + 1);
+		strlcpy(gname_copy, gname, gname_len);
 
 		func->groups[i] = gname_copy;
 
