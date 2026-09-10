@@ -68,6 +68,8 @@ static void print_mc_state(struct modem_ctl *mc)
 
 void modem_state_change(struct modem_ctl *mc, enum modem_state new_state)
 {
+	enum modem_event event;
+
 	if (mc->iod && mc->iod->modem_state_changed)
 		mc->iod->modem_state_changed(mc->iod, new_state);
 
@@ -77,7 +79,24 @@ void modem_state_change(struct modem_ctl *mc, enum modem_state new_state)
 	if (mc->bootd && mc->bootd->modem_state_changed)
 		mc->bootd->modem_state_changed(mc->bootd, new_state);
 
-	modem_notify_event(new_state);
+	switch (new_state) {
+	case STATE_OFFLINE:
+		event = MODEM_STATE_OFFLINE;
+		break;
+	case STATE_CRASH_RESET:
+		event = MODEM_EVENT_RESET;
+		break;
+	case STATE_CRASH_EXIT:
+		event = MODEM_EVENT_EXIT;
+		break;
+	case STATE_ONLINE:
+		event = MODEM_EVENT_ONLINE;
+		break;
+	default:
+		return;
+	}
+
+	modem_notify_event(event);
 }
 
 static irqreturn_t cp_active_handler(int irq, void *arg)
@@ -121,8 +140,8 @@ static irqreturn_t cp_active_handler(int irq, void *arg)
 	spin_unlock_irqrestore(&mc->lock, flags);
 
 	if ((old_state == STATE_ONLINE) &&
-	    ((new_state == STATE_CRASH_EXIT) ||
-	     (new_state == STATE_CRASH_RESET))) {
+		((new_state == STATE_CRASH_EXIT) ||
+		 (new_state == STATE_CRASH_RESET))) {
 		if (timer_pending(&mc->crash_ack_timer))
 			del_timer(&mc->crash_ack_timer);
 
@@ -352,7 +371,7 @@ static int ss333_force_crash_exit(struct modem_ctl *mc)
 	mif_err("+++\n");
 
 	mif_add_timer(&mc->crash_ack_timer, FORCE_CRASH_ACK_TIMEOUT,
-			      handle_no_response_cp_crash, (unsigned long)mc);
+				  handle_no_response_cp_crash, (unsigned long)mc);
 
 	if (mc->wake_lock && !wake_lock_active(mc->wake_lock)) {
 		wake_lock(mc->wake_lock);
@@ -621,9 +640,9 @@ int ss333_init_modemctl_device(struct modem_ctl *mc, struct modem_data *pdata)
 		return ret;
 
 	if (!pdata->gpio_cp_on || !pdata->gpio_cp_reset
-	    || !pdata->gpio_pda_active || !pdata->gpio_phone_active
-	    || !pdata->gpio_ap_wakeup || !pdata->gpio_ap_status
-	    || !pdata->gpio_cp_wakeup || !pdata->gpio_cp_status) {
+		|| !pdata->gpio_pda_active || !pdata->gpio_phone_active
+		|| !pdata->gpio_ap_wakeup || !pdata->gpio_ap_status
+		|| !pdata->gpio_cp_wakeup || !pdata->gpio_cp_status) {
 		mif_err("ERR! no GPIO data\n");
 		mif_err("xxx\n");
 		return -ENXIO;
@@ -677,4 +696,3 @@ int ss333_init_modemctl_device(struct modem_ctl *mc, struct modem_data *pdata)
 	mif_err("---\n");
 	return 0;
 }
-
