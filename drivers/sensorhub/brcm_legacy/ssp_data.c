@@ -737,13 +737,14 @@ int parse_dataframe(struct ssp_data *data, char *pchRcvDataFrame, int iLength)
 			sensorsdata.meta_data.what = pchRcvDataFrame[iDataIdx++];
 			sensorsdata.meta_data.sensor = pchRcvDataFrame[iDataIdx++];
             
-            if(sensorsdata.meta_data.what != 1)
-                goto error_return;
-            
-        	if ((sensorsdata.meta_data.sensor < 0) || (sensorsdata.meta_data.sensor >= SENSOR_MAX)) {
-			pr_err("[SSP]: %s - Mcu meta_data frame1 error %d\n", __func__,
-					sensorsdata.meta_data.sensor);
-			return ERROR;
+			if (sensorsdata.meta_data.what != 1)
+				goto error_return;
+
+			if ((sensorsdata.meta_data.sensor < 0) ||
+				(sensorsdata.meta_data.sensor >= SENSOR_MAX)) {
+				pr_err("[SSP]: %s - Mcu meta_data frame1 error %d\n", __func__,
+						sensorsdata.meta_data.sensor);
+				return ERROR;
 			}
 			report_meta_data(data, &sensorsdata);
 			break;
