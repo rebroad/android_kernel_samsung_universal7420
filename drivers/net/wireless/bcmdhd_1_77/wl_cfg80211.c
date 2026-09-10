@@ -11203,7 +11203,7 @@ s32 wl_mode_to_nl80211_iftype(s32 mode)
 
 
 #ifdef CONFIG_PM
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 6, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 11, 0))
 static const struct wiphy_wowlan_support brcm_wowlan_support = {
 	.flags = WIPHY_WOWLAN_ANY,
 	.n_patterns = WL_WOWLAN_MAX_PATTERNS,
@@ -11213,7 +11213,7 @@ static const struct wiphy_wowlan_support brcm_wowlan_support = {
 	.max_pkt_offset = WL_WOWLAN_MAX_PATTERN_LEN,
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3, 9, 0) */
 };
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3, 6, 0) */
+#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3, 11, 0) */
 #endif /* CONFIG_PM */
 
 static s32 wl_setup_wiphy(struct wireless_dev *wdev, struct device *sdiofunc_dev, void *context)
