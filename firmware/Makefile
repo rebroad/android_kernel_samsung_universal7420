@@ -164,7 +164,7 @@ fw-shipped-$(CONFIG_KEYBOARD_TC300K) += coreriver/tc305k_a8x.fw
 fw-shipped-$(CONFIG_KEYBOARD_CYPRESS_TOUCH_MBR31X5) += cypress/cypress_zerof.fw \
 							cypress/cypress_vlte.fw cypress/cypress_noble.fw
 fw-shipped-$(CONFIG_KEYBOARD_CYPRESS_TOUCH_20075) += cypress/cypress_k.fw
-fw-shipped-all := $(fw-shipped-y) $(fw-shipped-m) $(fw-shipped-)
+fw-shipped-all := $(sort $(fw-shipped-y) $(fw-shipped-m) $(fw-shipped-))
 
 # Sensorhub
 ifdef CONFIG_SENSORS_SSP_STM
@@ -194,7 +194,7 @@ fw-shipped-$(CONFIG_WIRELESS_FIRMWARE_UPDATE) += idt/p9220_otp.bin idt/p9220_sra
 
 # IrDA FPGA
 fw-shipped-$(CONFIG_SEC_FPGA_ICE40XX) += ice40xx/i2c_top_bitmap_1.fw
-fw-shipped-all := $(fw-shipped-y) $(fw-shipped-m) $(fw-shipped-)
+fw-shipped-all := $(sort $(fw-shipped-y) $(fw-shipped-m) $(fw-shipped-))
 
 #for ice5 led matrix
 fw-shipped-$(CONFIG_ICE5_FPGA_LED_MATRIX) += ice50/EINK0.fw ice50/EINK1.fw ice50/EINK0_05T.fw ice50/EINK1_05T.fw
