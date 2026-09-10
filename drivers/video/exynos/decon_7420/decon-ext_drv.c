@@ -178,19 +178,20 @@ int create_link_hdmi(struct decon_device *decon)
 static struct decon_lcd decon_int_porchs[] =
 {
 	/*    mode	 vfp vbp hfp hbp  vsa hsa xres yres  width height hs esc fps mic */
-	{V4L2_FIELD_NONE, 1, 42, 8, 94,   1, 36,  720, 480,   720, 480,   0, 0, 60, 0, 0},
-	{V4L2_FIELD_NONE, 1, 46, 8, 94,   1, 42,  720, 576,   720, 576,   0, 0, 50, 0, 0},
-	{V4L2_FIELD_NONE, 1, 27, 8, 194,  1, 168, 1280, 720,  1280, 720,  0, 0, 60, 0, 0},
-	{V4L2_FIELD_NONE, 1, 27, 8, 94,   1, 598, 1280, 720,  1280, 720,  0, 0, 50, 0, 0},
-	{V4L2_FIELD_NONE, 1, 42, 8, 94,   1, 178, 1920, 1080, 1920, 1080, 0, 0, 60, 0, 0},
-	{V4L2_FIELD_NONE, 1, 42, 8, 94,   1, 618, 1920, 1080, 1920, 1080, 0, 0, 50, 0, 0},
-	{V4L2_FIELD_NONE, 1, 42, 8, 94,   1, 178, 1920, 1080, 1920, 1080, 0, 0, 30, 0, 0},
-	{V4L2_FIELD_NONE, 1, 42, 8, 94,   1, 618, 1920, 1080, 1920, 1080, 0, 0, 25, 0, 0},
-	{V4L2_FIELD_NONE, 1, 42, 8, 94,   1, 728, 1920, 1080, 1920, 1080, 0, 0, 24, 0, 0},
-	{V4L2_FIELD_NONE, 1, 87, 8, 460,  1, 92,  3840, 2160, 3840, 2160, 0, 0, 30, 0, 0},
-	{V4L2_FIELD_NONE, 1, 87, 8, 1340, 1, 92,  3840, 2160, 3840, 2160, 0, 0, 25, 0, 0},
-	{V4L2_FIELD_NONE, 1, 87, 8, 1560, 1, 92,  3840, 2160, 3840, 2160, 0, 0, 24, 0, 0},
-	{V4L2_FIELD_NONE, 1, 87, 8, 1304, 1, 92,  4096, 2160, 4096, 2160, 0, 0, 24, 0, 0},
+	/* HDMI's V4L2 progressive-field value is the DECON DP PSR value (1). */
+	{DECON_DP_PSR_MODE, 1, 42, 8, 94,   1, 36,  720, 480,   720, 480,   0, 0, 60, 0, 0},
+	{DECON_DP_PSR_MODE, 1, 46, 8, 94,   1, 42,  720, 576,   720, 576,   0, 0, 50, 0, 0},
+	{DECON_DP_PSR_MODE, 1, 27, 8, 194,  1, 168, 1280, 720,  1280, 720,  0, 0, 60, 0, 0},
+	{DECON_DP_PSR_MODE, 1, 27, 8, 94,   1, 598, 1280, 720,  1280, 720,  0, 0, 50, 0, 0},
+	{DECON_DP_PSR_MODE, 1, 42, 8, 94,   1, 178, 1920, 1080, 1920, 1080, 0, 0, 60, 0, 0},
+	{DECON_DP_PSR_MODE, 1, 42, 8, 94,   1, 618, 1920, 1080, 1920, 1080, 0, 0, 50, 0, 0},
+	{DECON_DP_PSR_MODE, 1, 42, 8, 94,   1, 178, 1920, 1080, 1920, 1080, 0, 0, 30, 0, 0},
+	{DECON_DP_PSR_MODE, 1, 42, 8, 94,   1, 618, 1920, 1080, 1920, 1080, 0, 0, 25, 0, 0},
+	{DECON_DP_PSR_MODE, 1, 42, 8, 94,   1, 728, 1920, 1080, 1920, 1080, 0, 0, 24, 0, 0},
+	{DECON_DP_PSR_MODE, 1, 87, 8, 460,  1, 92,  3840, 2160, 3840, 2160, 0, 0, 30, 0, 0},
+	{DECON_DP_PSR_MODE, 1, 87, 8, 1340, 1, 92,  3840, 2160, 3840, 2160, 0, 0, 25, 0, 0},
+	{DECON_DP_PSR_MODE, 1, 87, 8, 1560, 1, 92,  3840, 2160, 3840, 2160, 0, 0, 24, 0, 0},
+	{DECON_DP_PSR_MODE, 1, 87, 8, 1304, 1, 92,  4096, 2160, 4096, 2160, 0, 0, 24, 0, 0},
 };
 
 struct decon_lcd *find_porch(struct v4l2_mbus_framefmt mbus_fmt)
@@ -215,7 +216,7 @@ struct decon_lcd *find_porch(struct v4l2_mbus_framefmt mbus_fmt)
 }
 
 int decon_get_hdmi_config(struct decon_device *decon,
-               struct exynos_hdmi_data *hdmi_data)
+			   struct exynos_hdmi_data *hdmi_data)
 {
 	struct v4l2_control ctrl;
 	int ret = 0;
@@ -269,7 +270,7 @@ int decon_get_hdmi_config(struct decon_device *decon,
 }
 
 int decon_set_hdmi_config(struct decon_device *decon,
-               struct exynos_hdmi_data *hdmi_data)
+			   struct exynos_hdmi_data *hdmi_data)
 {
 	struct v4l2_control ctrl;
 	int ret = 0;
