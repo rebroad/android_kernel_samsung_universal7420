@@ -407,6 +407,7 @@ struct samsung_usbphy {
 
 #define phy_to_sphy(x)		container_of((x), struct samsung_usbphy, phy)
 
+#ifndef SAMSUNG_USBPHY_NO_DT_MATCH
 static const struct of_device_id samsung_usbphy_dt_match[];
 
 static inline const struct samsung_usbphy_drvdata
@@ -422,6 +423,7 @@ static inline const struct samsung_usbphy_drvdata
 	return (struct samsung_usbphy_drvdata *)
 				platform_get_device_id(pdev)->driver_data;
 }
+#endif
 
 extern int samsung_usbphy_parse_dt(struct samsung_usbphy *sphy);
 extern void samsung_usbphy_set_isolation(struct samsung_usbphy *sphy, bool on);

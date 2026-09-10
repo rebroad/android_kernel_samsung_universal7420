@@ -29,6 +29,7 @@
 #include <linux/of_address.h>
 #include <linux/usb/samsung_usb_phy.h>
 
+#define SAMSUNG_USBPHY_NO_DT_MATCH
 #include "phy-samsung-usb.h"
 
 int samsung_usbphy_parse_dt(struct samsung_usbphy *sphy)
